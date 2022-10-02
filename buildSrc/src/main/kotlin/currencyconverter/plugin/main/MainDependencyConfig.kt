@@ -16,7 +16,7 @@ internal fun Project.configureMainDependency() = dependencies {
     add("implementation", Dependencies.lifecycleKtx)
     add("implementation", Dependencies.lifecycleViewModelCompose)
     add("implementation", Dependencies.composeActivity)
-    add("implementation", Dependencies.rxAndroid)
+    add("implementation", Dependencies.kotlinxCoroutines)
     add("implementation", Dependencies.gson)
     add("implementation", Dependencies.swipeRefresh)
     add("implementation", Dependencies.coil)
