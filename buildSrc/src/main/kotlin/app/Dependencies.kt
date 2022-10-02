@@ -7,7 +7,7 @@ object Dependencies {
     const val materialDesign = "com.google.android.material:material:${DependenciesVersions.material_design_version}"
 
     // ViewModel and LiveData
-    const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${DependenciesVersions.lifecycle_version}"
+    const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${DependenciesVersions.lifecycle_extensions_version}"
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${DependenciesVersions.lifecycle_version}"
     const val lifecycleViewModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:${DependenciesVersions.lifecycle_version}"
     const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${DependenciesVersions.lifecycle_version}"
@@ -49,6 +49,6 @@ object Dependencies {
 
     // Test
     const val junit = "junit:junit:${DependenciesVersions.junit_version}"
-    const val junitExt = "androidx.test.ext:junit:${DependenciesVersions.junit_ext_version}"
+    const val testRunner = "androidx.test:runner:${DependenciesVersions.junit_ext_version}"
     const val espresso = "androidx.test.espresso:espresso-core:${DependenciesVersions.espresso_version}"
 }

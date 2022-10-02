@@ -26,7 +26,7 @@ androidExtensions {
     isExperimental = true
 }
 
-//dependencies {
-//    implementation(project(":core"))
-//    implementation(project(":common"))
-//}
+dependencies {
+    implementation(project(":core"))
+    implementation(project(":common"))
+}

@@ -24,7 +24,7 @@ internal fun Project.configureMainDependency() = dependencies {
     add("implementation", Dependencies.coilSvg)
 
     add("testImplementation", Dependencies.junit)
-    add("androidTestImplementation", Dependencies.junitExt)
+    add("androidTestImplementation", Dependencies.testRunner)
     add("androidTestImplementation", Dependencies.espresso)
     add("debugImplementation", Dependencies.composeUITooling)
 }

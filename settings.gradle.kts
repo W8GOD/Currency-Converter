@@ -1,4 +1,4 @@
 rootProject.name = "Currency-Converter"
 rootProject.buildFileName = "build.gradle.kts"
 
-include(":app")
+include(":app", ":common", ":core")

@@ -1,4 +1,4 @@
-package com.arnon.currencyconverter
+package com.arnon.currencyconverter.common
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.arnon.currencyconverter", appContext.packageName)
+        assertEquals("com.arnon.currencyconverter.common.test", appContext.packageName)
     }
 }

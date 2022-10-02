@@ -8,6 +8,7 @@ object DependenciesVersions {
     const val appcompat_version = "1.5.1"
     const val material_design_version = "1.6.1"
     const val lifecycle_version = "2.5.1"
+    const val lifecycle_extensions_version = "2.2.0"
     const val gson_version = "2.9.1"
     const val swipe_refresh_version = "0.25.1"
     const val retrofit_version = "2.9.0"
