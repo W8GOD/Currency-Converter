@@ -20,4 +20,5 @@ object DependenciesVersions {
     const val junit_ext_version = "1.4.0"
     const val espresso_version = "3.4.0"
     const val kotlinx_coroutines_version = "1.3.9"
+    const val hilt_version = "2.44"
 }

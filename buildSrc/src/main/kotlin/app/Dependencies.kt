@@ -27,6 +27,10 @@ object Dependencies {
     // Kotlinx Coroutines
     const val kotlinxCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${DependenciesVersions.kotlinx_coroutines_version}"
 
+    // Hilt
+    const val hilt = "com.google.dagger:hilt-android:${DependenciesVersions.hilt_version}"
+    const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:${DependenciesVersions.hilt_version}"
+
     // Coil
     const val coil = "com.google.accompanist:accompanist-coil:${DependenciesVersions.coil_version}"
     const val coilCompose = "io.coil-kt:coil-compose:${DependenciesVersions.coil_compose_version}"
