@@ -1,79 +1,28 @@
-import app.Dependencies
+import dependencies.Dependencies
 
 plugins {
-    id("com.android.library")
-    id("com.google.dagger.hilt.android") version "2.44" apply false
-    kotlin("android.extensions")
-    kotlin("android")
-    kotlin("kapt")
-}
-
-repositories {
-    google()
-    mavenCentral()
+    id("commons.android-library")
 }
 
 android {
-    compileSdk = app.DefaultBuildConfig.compileSdkVersion
-    buildToolsVersion = app.DefaultBuildConfig.compileSdkVersion.toString()
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    sourceSets["main"].apply {
-        java.srcDir("src/main/kotlin")
-    }
-
     defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments["room.incremental"] = "true"
-                arguments["room.schemaLocation"] = "$projectDir/schemas"
-            }
-        }
+        buildConfigField("String", "BASE_API_URL", "\"https://openexchangerates.org/\"")
+        buildConfigField("String", "APP_ID", "\"Token 7f53c92e5a9f49fdb9e70802ce8a03d2\"")
     }
-
-    buildTypes.forEach {
-        try {
-            it.buildConfigField("String", "BASE_API_URL", "\"https://openexchangerates.org/\"")
-            it.buildConfigField("String", "APP_ID", "\"Token 7f53c92e5a9f49fdb9e70802ce8a03d2\"")
-        } catch (ignored: Exception) {
-            throw GradleException(ignored.message ?: "")
-        }
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
-androidExtensions {
-    isExperimental = true
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 dependencies {
-    implementation(Dependencies.room)
-    implementation(Dependencies.roomKtx)
-    implementation(Dependencies.lifecycleExtensions)
-    implementation(Dependencies.coreKtx)
-    implementation(Dependencies.retrofit)
-    implementation(Dependencies.retrofitConverter)
-    implementation(Dependencies.okhttp)
-    implementation(Dependencies.okhttpLogging)
-    implementation(Dependencies.kotlinxCoroutines)
+    api(project(BuildModules.COMMON))
+    api(Dependencies.RETROFIT)
+    api(Dependencies.MOSHI)
 
-    implementation(Dependencies.hilt)
-    kapt(Dependencies.hiltAndroidCompiler)
+    implementation(Dependencies.RETROFIT_CONVERTER)
+    implementation(Dependencies.ROOM)
+    implementation(Dependencies.ROOM_KTX)
+    implementation(Dependencies.OKHTTP_LOGGING)
+    implementation(Dependencies.MOSHI_KTX)
+    implementation(Dependencies.KOTLIN_COROUTINES)
 
-    kapt(Dependencies.roomCompiler)
-
-    implementation(Dependencies.junit)
-    implementation(Dependencies.testRunner)
-
+    kapt(Dependencies.HILT_ANDROID_COMPILER)
+    kapt(Dependencies.ROOM_COMPILER)
 }

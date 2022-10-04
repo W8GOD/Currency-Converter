@@ -1,33 +1,67 @@
-import app.DependenciesVersions
+import dependencies.Dependencies
+import extensions.*
 
 plugins {
-    id("com.google.dagger.hilt.android") version "2.44" apply false
-    id("currencyconverter.plugin.main")
-    kotlin("android")
-    kotlin("android.extensions")
+    id(BuildPlugins.ANDROID_APPLICATION)
+    id(BuildPlugins.KOTLIN_ANDROID)
+    id(BuildPlugins.KOTLIN_ANDROID_EXTENSIONS)
+    id(BuildPlugins.KOTLIN_KAPT)
+    id(BuildPlugins.NAVIGATION)
+    id(BuildPlugins.HILT)
 }
 
 android {
-    sourceSets["main"].apply {
-        java.srcDir("src/main/kotlin")
+    compileSdk = BuildDefaultConfig.COMPILE_SDK_VERSION
+    defaultConfig {
+        applicationId = BuildDefaultConfig.APPLICATION_ID
+        minSdk = BuildDefaultConfig.MIN_SDK_VERSION
+        targetSdk = BuildDefaultConfig.TARGET_SDK_VERSION
+
+        versionCode = BuildDefaultConfig.VERSION_CODE
+        versionName = BuildDefaultConfig.VERSION_NAME
+
+        testInstrumentationRunner = "com.android.sample.app.AppTestRunner"
     }
 
-    buildFeatures { compose = true }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = DependenciesVersions.compose_version
+        kotlinCompilerExtensionVersion  = BuildDependenciesVersions.COMPOSE_COMPILER_VERSION
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
+    buildFeatures {
+        compose = true
     }
-}
-
-androidExtensions {
-    isExperimental = true
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":common"))
+    implementation(project(BuildModules.CORE))
+    implementation(Dependencies.HILT)
+    implementation(Dependencies.COMPOSE_UI)
+    implementation(Dependencies.COMPOSE_MATERIAL)
+    implementation(Dependencies.COMPOSE_PREVIEW)
+    implementation(Dependencies.COMPOSE_UI_TOOLING)
+    implementation(Dependencies.COMPOSE_ACTIVITY)
+
+//    implementation(Dependencies.NAVIGATION_UI)
+//    implementation(Dependencies.NAVIGATION_FRAGMENT)
+//    implementation(Dependencies.NAVIGATION_FEATURES)
+
+    kapt(Dependencies.HILT_ANDROID_COMPILER)
 }

@@ -1,5 +1,5 @@
 package com.arnon.currencyconverter.core.constant
 
 internal object Constants {
-    const val BASE_URL = "https://openexchangerates.org/"
+    const val AUTHORIZATION_HEADER = "Authorization"
 }

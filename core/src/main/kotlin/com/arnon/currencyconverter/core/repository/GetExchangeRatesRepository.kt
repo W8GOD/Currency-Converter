@@ -8,13 +8,7 @@ import javax.inject.Inject
 class GetExchangeRatesRepository @Inject constructor(
     private val exchangeRatesHelper: ApiExchangeRatesHelper
 ) {
-
-    suspend fun getExchangeRates(): String {
-        val response = exchangeRatesHelper.getLatestExchangeRates()
-        return if (response.isSuccessful) {
-            response.body()?.toString() ?: ""
-        } else {
-            ""
-        }
+    suspend fun getExchangeRates(): Response<LatestExchangeRatesResponse> {
+        return exchangeRatesHelper.getLatestExchangeRates()
     }
 }

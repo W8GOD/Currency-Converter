@@ -1,11 +1,12 @@
 package com.arnon.currencyconverter.core.di
 
 import com.arnon.currencyconverter.core.BuildConfig
-import com.arnon.currencyconverter.core.constant.Constants
+import com.arnon.currencyconverter.core.constant.Constants.AUTHORIZATION_HEADER
+import com.arnon.currencyconverter.core.service.ApiExchangeRatesHelper
 import com.arnon.currencyconverter.core.service.ApiExchangeRatesHelperImpl
 import com.arnon.currencyconverter.core.service.ApiExchangeRatesService
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -21,11 +22,7 @@ import javax.inject.Singleton
 object CoreModule {
 
     @Provides
-    fun provideBaseUrl() = Constants.BASE_URL
-
-    @Provides
-    @Singleton
-    fun getGson(): Gson = GsonBuilder().serializeNulls().setLenient().create()
+    fun provideBaseUrl() = BuildConfig.BASE_API_URL
 
     @Singleton
     @Provides
@@ -34,19 +31,31 @@ object CoreModule {
             val loggingInterceptor = HttpLoggingInterceptor().apply {
                 setLevel(HttpLoggingInterceptor.Level.BODY)
             }
-            OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+            OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor { chain ->
+                    val chainBuilder = chain.request().newBuilder()
+                    chainBuilder.addHeader(AUTHORIZATION_HEADER, BuildConfig.APP_ID)
+                    chain.proceed(chainBuilder.build())
+                }
         } else {
-            OkHttpClient.Builder().build()
-        }
+            OkHttpClient.Builder()
+        }.build()
     }
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient, BASE_URL: String): Retrofit {
+    fun provideMoshi(): Moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi, BASE_URL: String): Retrofit {
         return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
@@ -58,5 +67,7 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun provideApiExchangeRatesHelper(apiHelper: ApiExchangeRatesHelperImpl) = apiHelper
+    fun provideApiExchangeRatesHelper(apiExchangeRatesHelperImpl: ApiExchangeRatesHelperImpl): ApiExchangeRatesHelper {
+        return apiExchangeRatesHelperImpl
+    }
 }

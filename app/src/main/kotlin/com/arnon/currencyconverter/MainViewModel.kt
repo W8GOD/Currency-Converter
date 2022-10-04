@@ -22,15 +22,9 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getExchangeRates() = viewModelScope.launch {
+        _uiState.value = MainUiState.Loading
         provider.repository.getExchangeRates().let { response ->
-            _uiState.value = MainUiState.Failure(response)
-//            if (response.body() == null) {
-//                _uiState.value = MainUiState.Failure("Please try again!")
-//            } else if (response.isSuccessful) {
-//                _uiState.value = MainUiState.Success(response.body()!!)
-//            } else {
-//                _uiState.value = MainUiState.Failure(response.message())
-//            }
+            _uiState.value = MainUiState.Failure("")
         }
     }
 }
