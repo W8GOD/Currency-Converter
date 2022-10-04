@@ -2,7 +2,7 @@ import app.Dependencies
 
 plugins {
     id("com.android.library")
-    id("com.google.dagger.hilt.android")
+    id("com.google.dagger.hilt.android") version "2.44" apply false
     kotlin("android.extensions")
     kotlin("android")
     kotlin("kapt")
@@ -64,13 +64,13 @@ dependencies {
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.retrofit)
     implementation(Dependencies.retrofitConverter)
-    implementation(Dependencies.retrofitAdapter)
     implementation(Dependencies.okhttp)
     implementation(Dependencies.okhttpLogging)
     implementation(Dependencies.kotlinxCoroutines)
 
     implementation(Dependencies.hilt)
     kapt(Dependencies.hiltAndroidCompiler)
+
     kapt(Dependencies.roomCompiler)
 
     implementation(Dependencies.junit)

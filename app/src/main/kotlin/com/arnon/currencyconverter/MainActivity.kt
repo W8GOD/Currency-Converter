@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @Inject lateinit var mainViewModel: MainViewModel

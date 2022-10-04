@@ -1,6 +1,7 @@
 import app.DependenciesVersions
 
 plugins {
+    id("com.google.dagger.hilt.android") version "2.44" apply false
     id("currencyconverter.plugin.main")
     kotlin("android")
     kotlin("android.extensions")

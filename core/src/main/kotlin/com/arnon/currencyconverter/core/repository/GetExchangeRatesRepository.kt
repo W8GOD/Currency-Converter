@@ -1,6 +1,8 @@
 package com.arnon.currencyconverter.core.repository
 
+import com.arnon.currencyconverter.core.model.response.LatestExchangeRatesResponse
 import com.arnon.currencyconverter.core.service.ApiExchangeRatesHelper
+import retrofit2.Response
 import javax.inject.Inject
 
 class GetExchangeRatesRepository @Inject constructor(
@@ -8,8 +10,11 @@ class GetExchangeRatesRepository @Inject constructor(
 ) {
 
     suspend fun getExchangeRates(): String {
-        return exchangeRatesHelper.getLatestExchangeRates().let {
-            it.body()?.base ?: ""
+        val response = exchangeRatesHelper.getLatestExchangeRates()
+        return if (response.isSuccessful) {
+            response.body()?.toString() ?: ""
+        } else {
+            ""
         }
     }
 }

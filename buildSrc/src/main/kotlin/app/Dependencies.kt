@@ -22,7 +22,6 @@ object Dependencies {
     // Retrofit
     const val retrofit = "com.squareup.retrofit2:retrofit:${DependenciesVersions.retrofit_version}"
     const val retrofitConverter = "com.squareup.retrofit2:converter-gson:${DependenciesVersions.retrofit_version}"
-    const val retrofitAdapter = "com.squareup.retrofit2:adapter-rxjava2:${DependenciesVersions.retrofit_version}"
 
     // Kotlinx Coroutines
     const val kotlinxCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${DependenciesVersions.kotlinx_coroutines_version}"
