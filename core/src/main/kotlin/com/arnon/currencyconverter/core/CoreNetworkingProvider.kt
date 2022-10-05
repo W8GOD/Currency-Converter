@@ -10,5 +10,5 @@ import javax.inject.Inject
 @InstallIn(SingletonComponent::class)
 class CoreNetworkingProvider @Inject constructor() {
     @Inject
-    lateinit var repository: GetExchangeRatesRepository
+    lateinit var getExchangeRatesRepository: GetExchangeRatesRepository
 }

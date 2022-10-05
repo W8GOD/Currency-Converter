@@ -1,6 +1,6 @@
 package com.arnon.currencyconverter
 
-import com.arnon.currencyconverter.core.model.response.LatestExchangeRatesResponse
+import com.arnon.currencyconverter.core.response.LatestExchangeRatesResponse
 
 sealed class MainUiState {
     object Loading : MainUiState()

@@ -1,4 +1,4 @@
-package com.arnon.currencyconverter.core.model.response
+package com.arnon.currencyconverter.core.response
 
 import android.os.Parcelable
 import com.squareup.moshi.Json

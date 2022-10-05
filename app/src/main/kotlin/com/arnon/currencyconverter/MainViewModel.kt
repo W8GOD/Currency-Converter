@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arnon.currencyconverter.core.CoreNetworkingProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,13 +19,18 @@ class MainViewModel @Inject constructor(
     val uiState: StateFlow<MainUiState> = _uiState
 
     init {
+        fetchExchangeRates()
         getExchangeRates()
     }
 
-    private fun getExchangeRates() = viewModelScope.launch {
+    private fun fetchExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
+        provider.getExchangeRatesRepository.getResultFromRemoteDataSource()
+    }
+
+    private fun getExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
         _uiState.value = MainUiState.Loading
-        provider.repository.getExchangeRates().let { response ->
-            _uiState.value = MainUiState.Failure("")
+        provider.getExchangeRatesRepository.getResultFromLocalDataSource().let { response ->
+            _uiState.value = MainUiState.Success(response)
         }
     }
 }

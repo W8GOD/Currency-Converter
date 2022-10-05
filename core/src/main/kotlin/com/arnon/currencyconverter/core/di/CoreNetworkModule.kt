@@ -2,9 +2,9 @@ package com.arnon.currencyconverter.core.di
 
 import com.arnon.currencyconverter.core.BuildConfig
 import com.arnon.currencyconverter.core.constant.Constants.AUTHORIZATION_HEADER
-import com.arnon.currencyconverter.core.service.ApiExchangeRatesHelper
-import com.arnon.currencyconverter.core.service.ApiExchangeRatesHelperImpl
 import com.arnon.currencyconverter.core.service.ApiExchangeRatesService
+import com.arnon.currencyconverter.core.service.ApiExchangeRatesServiceHelper
+import com.arnon.currencyconverter.core.service.ApiExchangeRatesServiceHelperImpl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -19,7 +19,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CoreModule {
+object CoreNetworkModule {
 
     @Provides
     fun provideBaseUrl() = BuildConfig.BASE_API_URL
@@ -67,7 +67,7 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun provideApiExchangeRatesHelper(apiExchangeRatesHelperImpl: ApiExchangeRatesHelperImpl): ApiExchangeRatesHelper {
-        return apiExchangeRatesHelperImpl
+    fun provideApiExchangeRatesServiceHelper(apiExchangeRatesServiceHelperImpl: ApiExchangeRatesServiceHelperImpl): ApiExchangeRatesServiceHelper {
+        return apiExchangeRatesServiceHelperImpl
     }
 }
