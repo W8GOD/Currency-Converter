@@ -24,6 +24,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.arnon.currencyconverter.ui.theme.Blue
+import com.arnon.currencyconverter.ui.theme.DarkGrey
 import com.arnon.currencyconverter.ui.theme.DarkestGrey
 import com.arnon.currencyconverter.ui.theme.Transparent
 
@@ -45,7 +47,7 @@ fun CurrencyPicker(
             modifier = Modifier
                 .border(
                     width = 0.5.dp,
-                    color = MaterialTheme.colors.secondaryVariant,
+                    color = DarkGrey,
                     shape = RoundedCornerShape(32.dp)
                 )
                 .onGloballyPositioned { coordinates ->
@@ -66,14 +68,13 @@ fun CurrencyPicker(
                     Modifier
                         .clip(CircleShape)
                         .clickable(enabled = enabled) { isExpanded = !isExpanded },
-                    tint = MaterialTheme.colors.onSecondary
+                    tint = DarkGrey
                 )
             },
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Transparent,
-                unfocusedIndicatorColor = Transparent,
-                disabledIndicatorColor = Transparent,
-                cursorColor = MaterialTheme.colors.onSecondary,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Transparent,
+                unfocusedBorderColor = Transparent,
+                cursorColor = Blue,
                 textColor = DarkestGrey
             ),
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters)
