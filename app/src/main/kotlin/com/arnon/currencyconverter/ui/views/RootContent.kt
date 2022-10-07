@@ -1,6 +1,7 @@
 package com.arnon.currencyconverter.ui.views
 
 import android.content.Context
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
@@ -10,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.arnon.currencyconverter.MainViewModel
 import com.arnon.currencyconverter.ui.theme.CurrencyConverterTheme
 
+@ExperimentalFoundationApi
 @Composable
 fun RootContent(
     context: Context, mainViewModel: MainViewModel

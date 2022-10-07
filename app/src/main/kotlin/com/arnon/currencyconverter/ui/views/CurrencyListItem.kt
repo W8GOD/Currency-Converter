@@ -12,9 +12,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.arnon.currencyconverter.core.model.ExchangeRate
+import com.arnon.currencyconverter.ui.theme.Blue
+import com.arnon.currencyconverter.ui.theme.DarkestGrey
+import com.arnon.currencyconverter.ui.theme.White
 
 @Composable
 fun CurrencyListItem(item: ExchangeRate) {
@@ -23,7 +25,7 @@ fun CurrencyListItem(item: ExchangeRate) {
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .fillMaxWidth(),
         elevation = 2.dp,
-        backgroundColor = Color.White,
+        backgroundColor = White,
         shape = RoundedCornerShape(corner = CornerSize(16.dp))
     ) {
         Row {
@@ -33,8 +35,13 @@ fun CurrencyListItem(item: ExchangeRate) {
                     .fillMaxWidth()
                     .align(Alignment.CenterVertically)
             ) {
-                Text(text = item.symbol, style = typography.h6)
-                Text(text = item.value.toString(), style = typography.caption)
+                Text(text = item.symbol, style = typography.h6, color = Blue)
+                Text(
+                    text = String.format("%.4f", item.value),
+                    style = typography.caption,
+                    color = DarkestGrey,
+                    maxLines = 1
+                )
             }
         }
     }

@@ -1,23 +1,22 @@
 package com.arnon.currencyconverter.ui.views
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.arnon.currencyconverter.ui.theme.Blue
+import com.arnon.currencyconverter.ui.theme.DarkestGrey
+import com.arnon.currencyconverter.ui.theme.LightGrey
+import com.arnon.currencyconverter.ui.theme.Transparent
 
 @Composable
 fun RateTextField(
-    modifier: Modifier,
     readOnly: Boolean,
     value: String,
     enabled: Boolean,
@@ -30,21 +29,20 @@ fun RateTextField(
         onValueChange = { newValue ->
             onBaseAmountChanged(newValue)
         },
-        modifier = modifier.fillMaxWidth(),
         textStyle = LocalTextStyle.current.copy(
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Center
         ),
         singleLine = true,
-        shape = RoundedCornerShape(6.dp),
+        shape = RoundedCornerShape(32.dp),
         colors = TextFieldDefaults.textFieldColors(
-            textColor = Color.DarkGray,
-            backgroundColor = MaterialTheme.colors.secondary,
-            disabledTextColor = Color.DarkGray,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            cursorColor = MaterialTheme.colors.onPrimary
+            textColor = DarkestGrey,
+            backgroundColor = LightGrey,
+            disabledTextColor = DarkestGrey,
+            focusedIndicatorColor = Transparent,
+            unfocusedIndicatorColor = Transparent,
+            disabledIndicatorColor = Transparent,
+            cursorColor = Blue
         ),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )

@@ -2,65 +2,75 @@ package com.arnon.currencyconverter.ui.views
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.arnon.currencyconverter.MainUiState
 import com.arnon.currencyconverter.MainViewModel
+import com.arnon.currencyconverter.ui.theme.Blue
 
+@ExperimentalFoundationApi
 @Composable
 fun BodyContent(
-    context: Context,
-    modifier: Modifier,
-    mainViewModel: MainViewModel
+    context: Context, modifier: Modifier, mainViewModel: MainViewModel
 ) {
-    val scrollState = rememberScrollState()
-    var baseAmount by rememberSaveable { mutableStateOf("1") }
     val currencies = listOf("USD")
     val currencyDefault = "USD"
 
-    Column {
-        Column(modifier = Modifier.padding(24.dp, 0.dp)) {
-            RateTextField(
-                modifier,
-                readOnly = false,
-                value = baseAmount,
-                enabled = true,
-                onBaseAmountChanged = { newBaseAmount -> baseAmount = newBaseAmount }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
+    Column(modifier = Modifier.padding(16.dp, 0.dp)) {
+        Text(
+            text = "Currency Converter",
+            modifier = Modifier.fillMaxWidth(),
+            style = TextStyle(fontSize = 28.sp, textAlign = TextAlign.Center, color = Blue)
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(),
+        ) {
+            Box(modifier = Modifier.weight(0.7f)) {
+                RateTextField(readOnly = false,
+                    value = mainViewModel.baseAmount.collectAsState().value,
+                    enabled = true,
+                    onBaseAmountChanged = { mainViewModel.setBaseAmount(it) })
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Box(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
+                    .weight(0.3f)
+                    .widthIn(min = 100.dp)
             ) {
-                CurrencyPicker(
-                    modifier,
+                CurrencyPicker(modifier,
                     readOnly = false,
                     enabled = true,
                     defaultSymbol = currencyDefault,
                     currencySymbols = currencies,
-                    onSymbolSelected = { }
-                )
+                    onSymbolSelected = { })
             }
-            Column(modifier = Modifier.padding(24.dp, 0.dp)) {
-                when (val stateValue = mainViewModel.uiState.collectAsState().value) {
-                    is MainUiState.Loading -> {
-                        Toast.makeText(context, "Loading", Toast.LENGTH_SHORT)
-                    }
-                    is MainUiState.Success -> {
-                        CurrencyContent(stateValue.value.rates)
-                    }
-                    is MainUiState.Failure -> {
-                        Toast.makeText(context, "Failed", Toast.LENGTH_SHORT)
-                    }
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when (val stateValue = mainViewModel.uiState.collectAsState().value) {
+                is MainUiState.Loading -> {
+                    Box { ProgressIndicator() }
+                }
+                is MainUiState.Success -> {
+                    CurrencyContent(stateValue.value.rates)
+                }
+                is MainUiState.Failure -> {
+                    Toast.makeText(context, "Please try again!", Toast.LENGTH_SHORT).show()
                 }
             }
         }

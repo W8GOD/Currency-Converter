@@ -1,8 +1,8 @@
 object BuildDependenciesVersions {
     const val GRADLE_ANDROID_VERSION = "7.0.3"
-    const val KOTLIN_VERSION = "1.5.31"
-    const val COMPOSE_COMPILER_VERSION = "1.0.4"
-    const val COMPOSE_UI_VERSION = "1.0.5"
+    const val KOTLIN_VERSION = "1.6.10"
+    const val COMPOSE_COMPILER_VERSION = "1.1.0"
+    const val COMPOSE_UI_VERSION = "1.1.0"
     const val COMPOSE_ACTIVITY_VERSION = "1.5.1"
     const val NAVIGATION_VERSION = "2.3.5"
     const val CORE_KTX_VERSION = "1.7.0"

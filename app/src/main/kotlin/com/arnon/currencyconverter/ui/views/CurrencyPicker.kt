@@ -2,7 +2,9 @@ package com.arnon.currencyconverter.ui.views
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,7 +17,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +24,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.arnon.currencyconverter.ui.theme.DarkestGrey
+import com.arnon.currencyconverter.ui.theme.Transparent
 
 @Composable
 fun CurrencyPicker(
@@ -33,20 +36,18 @@ fun CurrencyPicker(
     currencySymbols: List<String>,
     onSymbolSelected: (String) -> Unit
 ) {
-
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     var selectedSymbol by rememberSaveable { mutableStateOf(defaultSymbol) }
 
     Box {
         OutlinedTextField(
-            modifier = modifier
+            modifier = Modifier
                 .border(
                     width = 0.5.dp,
                     color = MaterialTheme.colors.secondaryVariant,
-                    shape = RoundedCornerShape(6.dp)
+                    shape = RoundedCornerShape(32.dp)
                 )
-                .width(150.dp)
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
                 },
@@ -62,35 +63,39 @@ fun CurrencyPicker(
                 Icon(
                     imageVector = if (isExpanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
                     contentDescription = if (isExpanded) "Show less" else "Show more",
-                    Modifier.clip(CircleShape).clickable(enabled = enabled) { isExpanded = !isExpanded },
+                    Modifier
+                        .clip(CircleShape)
+                        .clickable(enabled = enabled) { isExpanded = !isExpanded },
                     tint = MaterialTheme.colors.onSecondary
                 )
             },
             colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Transparent,
+                unfocusedIndicatorColor = Transparent,
+                disabledIndicatorColor = Transparent,
                 cursorColor = MaterialTheme.colors.onSecondary,
-                textColor = Color.DarkGray
+                textColor = DarkestGrey
             ),
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters)
         )
-        DropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false },
-            modifier = modifier
-                .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-                .height(250.dp)
-        ) {
-            currencySymbols.forEach { item ->
-                DropdownMenuItem(
-                    onClick = {
-                        selectedSymbol = item
-                        onSymbolSelected(item)
-                        isExpanded = false
+        MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(16.dp))) {
+            DropdownMenu(
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false },
+                modifier = modifier
+                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                    .height(250.dp)
+            ) {
+                currencySymbols.forEach { item ->
+                    DropdownMenuItem(
+                        onClick = {
+                            selectedSymbol = item
+                            onSymbolSelected(item)
+                            isExpanded = false
+                        }
+                    ) {
+                        Text(text = item, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                     }
-                ) {
-                    Text(text = item, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                 }
             }
         }

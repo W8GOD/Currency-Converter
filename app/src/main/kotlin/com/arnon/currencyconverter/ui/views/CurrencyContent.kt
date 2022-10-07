@@ -1,18 +1,23 @@
 package com.arnon.currencyconverter.ui.views
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arnon.currencyconverter.core.model.ExchangeRate
 
+@ExperimentalFoundationApi
 @Composable
 fun CurrencyContent(exchangeRate: List<ExchangeRate>) {
-    LazyColumn(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(3),
+        modifier = Modifier.padding(0.dp, 16.dp)
     ) {
-        items(exchangeRate) { item ->
+        itemsIndexed(items = exchangeRate) { _, item ->
             CurrencyListItem(item)
         }
     }
