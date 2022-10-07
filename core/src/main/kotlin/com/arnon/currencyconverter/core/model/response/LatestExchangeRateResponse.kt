@@ -1,4 +1,4 @@
-package com.arnon.currencyconverter.core.response
+package com.arnon.currencyconverter.core.model.response
 
 import android.os.Parcelable
 import com.squareup.moshi.Json
@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-data class LatestExchangeRatesResponse(
+data class LatestExchangeRateResponse(
     @Json(name = "base")
     val base: String = "",
     @Json(name = "timestamp")

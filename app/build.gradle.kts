@@ -56,6 +56,7 @@ dependencies {
     implementation(Dependencies.COMPOSE_UI)
     implementation(Dependencies.COMPOSE_MATERIAL)
     implementation(Dependencies.COMPOSE_PREVIEW)
+    implementation(Dependencies.COMPOSE_MATERIAL_ICONS)
     implementation(Dependencies.COMPOSE_UI_TOOLING)
     implementation(Dependencies.COMPOSE_ACTIVITY)
 

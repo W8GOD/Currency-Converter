@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 class ExchangeRatesDB(
     @PrimaryKey val base: String = "exchange_rates",
     val timestamp: Long = 0,
-    val rates: List<RateDBItem>
+    val rates: List<RateDBItem> = emptyList()
 )

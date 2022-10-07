@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,17 +21,20 @@ class MainViewModel @Inject constructor(
 
     init {
         fetchExchangeRates()
-        getExchangeRates()
     }
 
     private fun fetchExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
         provider.getExchangeRatesRepository.getResultFromRemoteDataSource()
+            .let { getExchangeRates() }
     }
 
     private fun getExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
         _uiState.value = MainUiState.Loading
-        provider.getExchangeRatesRepository.getResultFromLocalDataSource().let { response ->
-            _uiState.value = MainUiState.Success(response)
-        }
+        provider.getExchangeRatesRepository.getResultFromLocalDataSource()
+            .catch {
+                _uiState.value = MainUiState.Failure(it.message)
+            }.collect {
+                _uiState.value = MainUiState.Success(it)
+            }
     }
 }

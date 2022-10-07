@@ -48,6 +48,7 @@ object Dependencies {
     const val COMPOSE_UI = "androidx.compose.ui:ui:${BuildDependenciesVersions.COMPOSE_UI_VERSION}"
     const val COMPOSE_MATERIAL = "androidx.compose.material:material:${BuildDependenciesVersions.COMPOSE_UI_VERSION}"
     const val COMPOSE_PREVIEW = "androidx.compose.ui:ui-tooling-preview:${BuildDependenciesVersions.COMPOSE_UI_VERSION}"
+    const val COMPOSE_MATERIAL_ICONS = "androidx.compose.material:material-icons-extended:${BuildDependenciesVersions.COMPOSE_UI_VERSION}"
     const val COMPOSE_UI_TOOLING = "androidx.compose.ui:ui-tooling:${BuildDependenciesVersions.COMPOSE_UI_VERSION}"
     const val COMPOSE_ACTIVITY = "androidx.activity:activity-compose:${BuildDependenciesVersions.COMPOSE_ACTIVITY_VERSION}"
 
