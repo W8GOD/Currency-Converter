@@ -13,4 +13,10 @@ interface ExchangeRatesDao {
 
     @Query("SELECT * FROM exchange_rates")
     fun getLatestExchangeRates(): Flow<ExchangeRatesDB>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(data: CurrenciesDB)
+
+    @Query("SELECT * FROM currencies")
+    fun getCurrencies(): Flow<CurrenciesDB>
 }

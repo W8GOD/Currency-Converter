@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.arnon.currencyconverter.core.CoreNetworkingProvider
 import com.arnon.currencyconverter.core.model.ExchangeRate
 import com.arnon.currencyconverter.core.model.LatestExchangeRate
+import com.arnon.currencyconverter.model.MainCurrency
+import com.arnon.currencyconverter.ui.CurrenciesUiState
+import com.arnon.currencyconverter.ui.ExchangeRatesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,17 +27,27 @@ class MainViewModel @Inject constructor(
         private const val TIME_EXCHANGE_RATES_IN_MINUTES = 30
         private const val BASE_AMOUNT_DEFAULT = 1.0
         private const val BASE_AMOUNT_TEXT_DEFAULT = "1"
+        private const val CURRENCY_DEFAULT = "USD"
+        private const val CURRENCY_ACTIVE = "USD"
     }
 
-    private val _uiState = MutableStateFlow<MainUiState>(MainUiState.Loading)
-    val uiState: StateFlow<MainUiState> = _uiState
+    private val _exchangeRatesUiState =
+        MutableStateFlow<ExchangeRatesUiState>(ExchangeRatesUiState.Loading)
+    val exchangeRatesUiState: StateFlow<ExchangeRatesUiState> = _exchangeRatesUiState
+
+    private val _currenciesUiState = MutableStateFlow<CurrenciesUiState>(CurrenciesUiState.Loading)
+    val currenciesUiState: StateFlow<CurrenciesUiState> = _currenciesUiState
 
     private val _baseAmount = MutableStateFlow(BASE_AMOUNT_TEXT_DEFAULT)
     val baseAmount = _baseAmount.asStateFlow()
 
     private var _baseExchangeRates = LatestExchangeRate()
 
+    val currencyDefault = CURRENCY_DEFAULT
+    val currencyListDefault = listOf(MainCurrency(CURRENCY_DEFAULT, true))
+
     init {
+        fetchCurrencies()
         refreshExchangeRates()
     }
 
@@ -44,15 +57,16 @@ class MainViewModel @Inject constructor(
     }
 
     private fun calculateRates() {
-        if (_uiState.value is MainUiState.Success && _baseAmount.value.isNotEmpty()) {
-            val stateValue = (_uiState.value as MainUiState.Success).value
+        if (_exchangeRatesUiState.value is ExchangeRatesUiState.Success && _baseAmount.value.isNotEmpty()) {
+            val stateValue = (_exchangeRatesUiState.value as ExchangeRatesUiState.Success).value
             val newRates = _baseExchangeRates.rates.map {
                 ExchangeRate(
                     it.symbol,
                     (it.value * (_baseAmount.value.toDoubleOrNull() ?: BASE_AMOUNT_DEFAULT))
                 )
             }
-            _uiState.value = MainUiState.Success(stateValue.copy(rates = newRates))
+            _exchangeRatesUiState.value =
+                ExchangeRatesUiState.Success(stateValue.copy(rates = newRates))
         }
     }
 
@@ -65,18 +79,40 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun fetchCurrencies() = viewModelScope.launch(Dispatchers.IO) {
+        provider.getCurrenciesRepository.getResultFromRemoteDataSource().let { getCurrencies() }
+    }
+
+    private fun getCurrencies() = viewModelScope.launch(Dispatchers.IO) {
+        _currenciesUiState.value = CurrenciesUiState.Loading
+        provider.getCurrenciesRepository.getResultFromLocalDataSource().catch {
+            _currenciesUiState.value = CurrenciesUiState.Failure(it.message)
+        }.collect { currencyList ->
+            currencyList.map {
+                // For the free account, API only supports UDS exchange rates.
+                if (it.symbol == CURRENCY_ACTIVE) {
+                    MainCurrency(it.symbol, true)
+                } else {
+                    MainCurrency(it.symbol, false)
+                }
+            }.let {
+                _currenciesUiState.value = CurrenciesUiState.Success(it)
+            }
+        }
+    }
+
     private fun fetchExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
         provider.getExchangeRatesRepository.getResultFromRemoteDataSource()
             .let { getExchangeRates() }
     }
 
     private fun getExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
-        _uiState.value = MainUiState.Loading
+        _exchangeRatesUiState.value = ExchangeRatesUiState.Loading
         provider.getExchangeRatesRepository.getResultFromLocalDataSource().catch {
-            _uiState.value = MainUiState.Failure(it.message)
+            _exchangeRatesUiState.value = ExchangeRatesUiState.Failure(it.message)
         }.collect {
             _baseExchangeRates = it
-            _uiState.value = MainUiState.Success(_baseExchangeRates)
+            _exchangeRatesUiState.value = ExchangeRatesUiState.Success(_baseExchangeRates)
         }
     }
 }

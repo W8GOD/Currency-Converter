@@ -10,4 +10,8 @@ class ApiExchangeRatesServiceHelperImpl @Inject constructor(
     override suspend fun getLatestExchangeRates(): LatestExchangeRateResponse {
         return apiExchangeRatesService.getLatestExchangeRates()
     }
+
+    override suspend fun getCurrencies(): Map<String, String> {
+        return apiExchangeRatesService.getCurrencies()
+    }
 }

@@ -1,5 +1,6 @@
 package com.arnon.currencyconverter.core
 
+import com.arnon.currencyconverter.core.repository.GetCurrenciesRepository
 import com.arnon.currencyconverter.core.repository.GetLatestExchangeRatesRepository
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -11,4 +12,7 @@ import javax.inject.Inject
 class CoreNetworkingProvider @Inject constructor() {
     @Inject
     lateinit var getExchangeRatesRepository: GetLatestExchangeRatesRepository
+
+    @Inject
+    lateinit var getCurrenciesRepository: GetCurrenciesRepository
 }

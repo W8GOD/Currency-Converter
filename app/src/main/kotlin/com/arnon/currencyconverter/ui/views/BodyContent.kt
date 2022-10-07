@@ -13,8 +13,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.arnon.currencyconverter.MainUiState
 import com.arnon.currencyconverter.MainViewModel
+import com.arnon.currencyconverter.ui.CurrenciesUiState
+import com.arnon.currencyconverter.ui.ExchangeRatesUiState
 import com.arnon.currencyconverter.ui.theme.Blue
 
 @ExperimentalFoundationApi
@@ -22,8 +23,9 @@ import com.arnon.currencyconverter.ui.theme.Blue
 fun BodyContent(
     context: Context, modifier: Modifier, mainViewModel: MainViewModel
 ) {
-    val currencies = listOf("USD")
-    val currencyDefault = "USD"
+    val currencyDefault = mainViewModel.currencyDefault
+    val currencyListDefault = mainViewModel.currencyListDefault
+    val currencies = (mainViewModel.currenciesUiState.collectAsState().value as? CurrenciesUiState.Success)
 
     Column(modifier = Modifier.padding(16.dp, 0.dp)) {
         Text(
@@ -53,8 +55,10 @@ fun BodyContent(
                     readOnly = false,
                     enabled = true,
                     defaultSymbol = currencyDefault,
-                    currencySymbols = currencies,
-                    onSymbolSelected = { })
+                    currencyList = currencies?.value ?: currencyListDefault,
+                    onSymbolSelected = {
+                        //No op
+                    })
             }
         }
         Column(
@@ -62,14 +66,14 @@ fun BodyContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            when (val stateValue = mainViewModel.uiState.collectAsState().value) {
-                is MainUiState.Loading -> {
+            when (val stateValue = mainViewModel.exchangeRatesUiState.collectAsState().value) {
+                is ExchangeRatesUiState.Loading -> {
                     Box { ProgressIndicator() }
                 }
-                is MainUiState.Success -> {
+                is ExchangeRatesUiState.Success -> {
                     CurrencyContent(stateValue.value.rates)
                 }
-                is MainUiState.Failure -> {
+                is ExchangeRatesUiState.Failure -> {
                     Toast.makeText(context, "Please try again!", Toast.LENGTH_SHORT).show()
                 }
             }

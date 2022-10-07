@@ -6,4 +6,7 @@ import retrofit2.http.GET
 interface ApiExchangeRatesService {
     @GET("api/latest.json")
     suspend fun getLatestExchangeRates(): LatestExchangeRateResponse
+
+    @GET("api/currencies.json")
+    suspend fun getCurrencies(): Map<String, String>
 }

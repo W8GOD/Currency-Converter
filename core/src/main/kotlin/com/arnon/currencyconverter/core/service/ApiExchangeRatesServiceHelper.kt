@@ -4,4 +4,6 @@ import com.arnon.currencyconverter.core.model.response.LatestExchangeRateRespons
 
 interface ApiExchangeRatesServiceHelper {
     suspend fun getLatestExchangeRates(): LatestExchangeRateResponse
+
+    suspend fun getCurrencies(): Map<String, String>
 }

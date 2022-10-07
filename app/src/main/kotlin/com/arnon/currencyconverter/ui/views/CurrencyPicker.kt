@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import com.arnon.currencyconverter.model.MainCurrency
 import com.arnon.currencyconverter.ui.theme.Blue
 import com.arnon.currencyconverter.ui.theme.DarkGrey
 import com.arnon.currencyconverter.ui.theme.DarkestGrey
@@ -35,7 +36,7 @@ fun CurrencyPicker(
     readOnly: Boolean,
     enabled: Boolean,
     defaultSymbol: String,
-    currencySymbols: List<String>,
+    currencyList: List<MainCurrency>,
     onSymbolSelected: (String) -> Unit
 ) {
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -87,15 +88,16 @@ fun CurrencyPicker(
                     .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                     .height(250.dp)
             ) {
-                currencySymbols.forEach { item ->
+                currencyList.forEach { item ->
                     DropdownMenuItem(
+                        enabled = item.isActive,
                         onClick = {
-                            selectedSymbol = item
-                            onSymbolSelected(item)
+                            selectedSymbol = item.symbol
+                            onSymbolSelected(item.symbol)
                             isExpanded = false
                         }
                     ) {
-                        Text(text = item, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                        Text(text = item.symbol, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                     }
                 }
             }
