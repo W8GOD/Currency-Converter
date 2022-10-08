@@ -59,10 +59,10 @@ dependencies {
     implementation(Dependencies.COMPOSE_MATERIAL_ICONS)
     implementation(Dependencies.COMPOSE_UI_TOOLING)
     implementation(Dependencies.COMPOSE_ACTIVITY)
-
-//    implementation(Dependencies.NAVIGATION_UI)
-//    implementation(Dependencies.NAVIGATION_FRAGMENT)
-//    implementation(Dependencies.NAVIGATION_FEATURES)
+    implementation(Dependencies.TIMBER)
 
     kapt(Dependencies.HILT_ANDROID_COMPILER)
+
+    addTestsDependencies()
+    addAndroidTestsDependencies()
 }

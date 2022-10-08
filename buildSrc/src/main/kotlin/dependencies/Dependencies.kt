@@ -9,18 +9,11 @@ object Dependencies {
     const val APP_COMPAT = "androidx.appcompat:appcompat:${BuildDependenciesVersions.APPCOMPAT_VERSION}"
     const val MATERIAL_DESIGN = "com.google.android.material:material:${BuildDependenciesVersions.MATERIAL_DESIGN_VERSION}"
 
-    // ViewModel and LiveData
-    const val LIFECYCLE_EXTENSIONS = "androidx.lifecycle:lifecycle-extensions:${BuildDependenciesVersions.LIFECYCLE_EXTENSIONS_VERSION}"
-    const val LIFECYCLE_VIEW_MODEL = "androidx.lifecycle:lifecycle-viewmodel-ktx:${BuildDependenciesVersions.LIFECYCLE_VERSION}"
-    const val LIFECYCLE_VIEW_MODEL_COMPOSE = "androidx.lifecycle:lifecycle-viewmodel-compose:${BuildDependenciesVersions.LIFECYCLE_VERSION}"
-    const val LIFECYCLE_KTX = "androidx.lifecycle:lifecycle-runtime-ktx:${BuildDependenciesVersions.LIFECYCLE_VERSION}"
-
     // Moshi
     const val MOSHI = "com.squareup.moshi:moshi:${BuildDependenciesVersions.MOSHI_VERSION}"
     const val MOSHI_KTX = "com.squareup.moshi:moshi-kotlin:${BuildDependenciesVersions.MOSHI_VERSION}"
 
     // OKHttp
-    const val OKHTTP = "com.squareup.okhttp3:okhttp:${BuildDependenciesVersions.OKHTTP_VERSION}"
     const val OKHTTP_LOGGING = "com.squareup.okhttp3:logging-interceptor:${BuildDependenciesVersions.OKHTTP_VERSION}"
 
     // Retrofit
@@ -34,11 +27,6 @@ object Dependencies {
     const val HILT = "com.google.dagger:hilt-android:${BuildDependenciesVersions.HILT_VERSION}"
     const val HILT_ANDROID_COMPILER = "com.google.dagger:hilt-android-compiler:${BuildDependenciesVersions.HILT_VERSION}"
 
-    // Coil
-    const val COIL = "com.google.accompanist:accompanist-coil:${BuildDependenciesVersions.COIL_VERSION}"
-    const val COIL_COMPOSE = "io.coil-kt:coil-compose:${BuildDependenciesVersions.COIL_COMPOSE_VERSION}"
-    const val COIL_SVG = "io.coil-kt:coil-svg:${BuildDependenciesVersions.COIL_COMPOSE_VERSION}"
-
     // Room Database
     const val ROOM = "androidx.room:room-runtime:${BuildDependenciesVersions.ROOM_VERSION}"
     const val ROOM_KTX = "androidx.room:room-ktx:${BuildDependenciesVersions.ROOM_VERSION}"
@@ -51,14 +39,6 @@ object Dependencies {
     const val COMPOSE_MATERIAL_ICONS = "androidx.compose.material:material-icons-extended:${BuildDependenciesVersions.COMPOSE_UI_VERSION}"
     const val COMPOSE_UI_TOOLING = "androidx.compose.ui:ui-tooling:${BuildDependenciesVersions.COMPOSE_UI_VERSION}"
     const val COMPOSE_ACTIVITY = "androidx.activity:activity-compose:${BuildDependenciesVersions.COMPOSE_ACTIVITY_VERSION}"
-
-    // Navigation
-    const val NAVIGATION_FRAGMENT = "androidx.navigation:navigation-fragment-ktx:${BuildDependenciesVersions.NAVIGATION_VERSION}"
-    const val NAVIGATION_UI = "androidx.navigation:navigation-ui-ktx:${BuildDependenciesVersions.NAVIGATION_VERSION}"
-    const val NAVIGATION_FEATURES = "androidx.navigation:navigation-dynamic-features-fragment:${BuildDependenciesVersions.NAVIGATION_VERSION}"
-
-    // Swipe Refresh
-    const val SWIPE_REFRESH = "com.google.accompanist:accompanist-swiperefresh:${BuildDependenciesVersions.SWIPE_REFRESH_VERSION}"
 
     // Timber
     const val TIMBER = "com.jakewharton.timber:timber:${BuildDependenciesVersions.TIMBER_VERSION}"

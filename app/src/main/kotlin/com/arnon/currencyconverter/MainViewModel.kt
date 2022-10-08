@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -31,8 +32,7 @@ class MainViewModel @Inject constructor(
         private const val CURRENCY_ACTIVE = "USD"
     }
 
-    private val _exchangeRatesUiState =
-        MutableStateFlow<ExchangeRatesUiState>(ExchangeRatesUiState.Loading)
+    private val _exchangeRatesUiState = MutableStateFlow<ExchangeRatesUiState>(ExchangeRatesUiState.Loading)
     val exchangeRatesUiState: StateFlow<ExchangeRatesUiState> = _exchangeRatesUiState
 
     private val _currenciesUiState = MutableStateFlow<CurrenciesUiState>(CurrenciesUiState.Loading)
@@ -85,20 +85,22 @@ class MainViewModel @Inject constructor(
 
     private fun getCurrencies() = viewModelScope.launch(Dispatchers.IO) {
         _currenciesUiState.value = CurrenciesUiState.Loading
-        provider.getCurrenciesRepository.getResultFromLocalDataSource().catch {
-            _currenciesUiState.value = CurrenciesUiState.Failure(it.message)
-        }.collect { currencyList ->
-            currencyList.map {
-                // For the free account, API only supports UDS exchange rates.
-                if (it.symbol == CURRENCY_ACTIVE) {
-                    MainCurrency(it.symbol, true)
-                } else {
-                    MainCurrency(it.symbol, false)
+        provider.getCurrenciesRepository.getResultFromLocalDataSource()
+            .catch { throwable ->
+                _currenciesUiState.value = CurrenciesUiState.Failure(throwable.message)
+                Timber.d(throwable)
+            }.collect { currencyList ->
+                currencyList.map {
+                    // For the free account, API only supports UDS exchange rates.
+                    if (it.symbol == CURRENCY_ACTIVE) {
+                        MainCurrency(it.symbol, true)
+                    } else {
+                        MainCurrency(it.symbol, false)
+                    }
+                }.let {
+                    _currenciesUiState.value = CurrenciesUiState.Success(it)
                 }
-            }.let {
-                _currenciesUiState.value = CurrenciesUiState.Success(it)
             }
-        }
     }
 
     private fun fetchExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
@@ -108,11 +110,13 @@ class MainViewModel @Inject constructor(
 
     private fun getExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
         _exchangeRatesUiState.value = ExchangeRatesUiState.Loading
-        provider.getExchangeRatesRepository.getResultFromLocalDataSource().catch {
-            _exchangeRatesUiState.value = ExchangeRatesUiState.Failure(it.message)
-        }.collect {
-            _baseExchangeRates = it
-            _exchangeRatesUiState.value = ExchangeRatesUiState.Success(_baseExchangeRates)
-        }
+        provider.getExchangeRatesRepository.getResultFromLocalDataSource()
+            .catch { throwable ->
+                _exchangeRatesUiState.value = ExchangeRatesUiState.Failure(throwable.message)
+                Timber.d(throwable)
+            }.collect {
+                _baseExchangeRates = it
+                _exchangeRatesUiState.value = ExchangeRatesUiState.Success(_baseExchangeRates)
+            }
     }
 }
