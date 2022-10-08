@@ -112,7 +112,7 @@ class MainViewModelTest {
                 assertTrue(it.value.base == base)
                 assertTrue(it.value.timestamp == timestamp)
             } else {
-                fail("Wrong type $it")
+                fail("Wrong state $it")
             }
         }
     }
@@ -141,7 +141,7 @@ class MainViewModelTest {
             if (it is CurrenciesUiState.Success) {
                 assertTrue(it.value.first().symbol == symbol)
             } else {
-                fail("Wrong type $it")
+                fail("Wrong state $it")
             }
         }
     }
