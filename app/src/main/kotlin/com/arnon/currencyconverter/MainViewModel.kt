@@ -32,7 +32,8 @@ class MainViewModel @Inject constructor(
         private const val CURRENCY_ACTIVE = "USD"
     }
 
-    private val _exchangeRatesUiState = MutableStateFlow<ExchangeRatesUiState>(ExchangeRatesUiState.Loading)
+    private val _exchangeRatesUiState =
+        MutableStateFlow<ExchangeRatesUiState>(ExchangeRatesUiState.Loading)
     val exchangeRatesUiState: StateFlow<ExchangeRatesUiState> = _exchangeRatesUiState
 
     private val _currenciesUiState = MutableStateFlow<CurrenciesUiState>(CurrenciesUiState.Loading)
@@ -46,14 +47,22 @@ class MainViewModel @Inject constructor(
     val currencyDefault = CURRENCY_DEFAULT
     val currencyListDefault = listOf(MainCurrency(CURRENCY_DEFAULT, true))
 
-    init {
-        fetchCurrencies()
-        refreshExchangeRates()
-    }
-
     fun setBaseAmount(baseAmount: String) {
         _baseAmount.value = baseAmount
         calculateRates()
+    }
+
+    fun refreshExchangeRates(): Job {
+        return viewModelScope.launch(Dispatchers.IO) {
+            while (isActive) {
+                fetchExchangeRates()
+                delay(TIME_EXCHANGE_RATES_IN_MINUTES.toDuration(DurationUnit.MINUTES))
+            }
+        }
+    }
+
+    fun fetchCurrencies() = viewModelScope.launch(Dispatchers.IO) {
+        provider.getCurrenciesRepository.getResultFromRemoteDataSource().let { getCurrencies() }
     }
 
     private fun calculateRates() {
@@ -70,19 +79,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun refreshExchangeRates(): Job {
-        return viewModelScope.launch {
-            while (isActive) {
-                fetchExchangeRates()
-                delay(TIME_EXCHANGE_RATES_IN_MINUTES.toDuration(DurationUnit.MINUTES))
-            }
-        }
-    }
-
-    private fun fetchCurrencies() = viewModelScope.launch(Dispatchers.IO) {
-        provider.getCurrenciesRepository.getResultFromRemoteDataSource().let { getCurrencies() }
-    }
-
     private fun getCurrencies() = viewModelScope.launch(Dispatchers.IO) {
         _currenciesUiState.value = CurrenciesUiState.Loading
         provider.getCurrenciesRepository.getResultFromLocalDataSource()
@@ -91,7 +87,7 @@ class MainViewModel @Inject constructor(
                 Timber.d(throwable)
             }.collect { currencyList ->
                 currencyList.map {
-                    // For the free account, API only supports UDS exchange rates.
+                    // For the free account, API only supports USD exchange rates.
                     if (it.symbol == CURRENCY_ACTIVE) {
                         MainCurrency(it.symbol, true)
                     } else {
@@ -105,7 +101,9 @@ class MainViewModel @Inject constructor(
 
     private fun fetchExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
         provider.getExchangeRatesRepository.getResultFromRemoteDataSource()
-            .let { getExchangeRates() }
+            .let {
+                getExchangeRates()
+            }
     }
 
     private fun getExchangeRates() = viewModelScope.launch(Dispatchers.IO) {

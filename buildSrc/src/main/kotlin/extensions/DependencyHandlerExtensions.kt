@@ -76,6 +76,7 @@ fun DependencyHandler.addTestsDependencies() {
     testImplementation(Dependencies.RULES)
     testImplementation(Dependencies.RUNNER)
     testImplementation(Dependencies.EXT)
+    testImplementation(Dependencies.COROUTINES_TEST)
 }
 
 /**

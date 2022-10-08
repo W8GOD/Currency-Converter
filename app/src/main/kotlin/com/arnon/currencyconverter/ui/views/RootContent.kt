@@ -16,6 +16,8 @@ import com.arnon.currencyconverter.ui.theme.CurrencyConverterTheme
 fun RootContent(
     context: Context, mainViewModel: MainViewModel
 ) {
+    mainViewModel.refreshExchangeRates()
+    mainViewModel.fetchCurrencies()
     CurrencyConverterTheme {
         Scaffold(topBar = {
             TopAppBar(modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 0.dp),

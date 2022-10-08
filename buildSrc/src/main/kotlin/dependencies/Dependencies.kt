@@ -51,6 +51,7 @@ object Dependencies {
     const val RUNNER = "androidx.test:runner:${BuildDependenciesVersions.TEST_VERSION}"
     const val RULES = "androidx.test:rules:${BuildDependenciesVersions.TEST_VERSION}"
     const val ARCH_CORE = "androidx.arch.core:core-testing:${BuildDependenciesVersions.ARCH_CORE_VERSION}"
+    const val COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${BuildDependenciesVersions.KOTLINX_COROUTINES_VERSION}"
 
     // Tests-Android
     const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:${BuildDependenciesVersions.ESPRESSO_VERSION}"
