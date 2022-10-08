@@ -32,8 +32,10 @@ class MainViewModel @Inject constructor(
         private const val CURRENCY_ACTIVE = "USD"
     }
 
-    private val _exchangeRatesUiState =
-        MutableStateFlow<ExchangeRatesUiState>(ExchangeRatesUiState.Loading)
+    val currencyDefault = CURRENCY_DEFAULT
+    val currencyListDefault = listOf(MainCurrency(CURRENCY_DEFAULT, true))
+
+    private val _exchangeRatesUiState = MutableStateFlow<ExchangeRatesUiState>(ExchangeRatesUiState.Loading)
     val exchangeRatesUiState: StateFlow<ExchangeRatesUiState> = _exchangeRatesUiState
 
     private val _currenciesUiState = MutableStateFlow<CurrenciesUiState>(CurrenciesUiState.Loading)
@@ -44,8 +46,7 @@ class MainViewModel @Inject constructor(
 
     private var _baseExchangeRates = LatestExchangeRate()
 
-    val currencyDefault = CURRENCY_DEFAULT
-    val currencyListDefault = listOf(MainCurrency(CURRENCY_DEFAULT, true))
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable -> throwable.printStackTrace() }
 
     fun setBaseAmount(baseAmount: String) {
         _baseAmount.value = baseAmount
@@ -61,7 +62,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun fetchCurrencies() = viewModelScope.launch(Dispatchers.IO) {
+    fun fetchCurrencies() = viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
         provider.getCurrenciesRepository.getResultFromRemoteDataSource().let { getCurrencies() }
     }
 
@@ -81,40 +82,36 @@ class MainViewModel @Inject constructor(
 
     private fun getCurrencies() = viewModelScope.launch(Dispatchers.IO) {
         _currenciesUiState.value = CurrenciesUiState.Loading
-        provider.getCurrenciesRepository.getResultFromLocalDataSource()
-            .catch { throwable ->
-                _currenciesUiState.value = CurrenciesUiState.Failure(throwable.message)
-                Timber.d(throwable)
-            }.collect { currencyList ->
-                currencyList.map {
-                    // For the free account, API only supports USD exchange rates.
-                    if (it.symbol == CURRENCY_ACTIVE) {
-                        MainCurrency(it.symbol, true)
-                    } else {
-                        MainCurrency(it.symbol, false)
-                    }
-                }.let {
-                    _currenciesUiState.value = CurrenciesUiState.Success(it)
+        provider.getCurrenciesRepository.getResultFromLocalDataSource().catch { throwable ->
+            _currenciesUiState.value = CurrenciesUiState.Failure(throwable.message)
+            Timber.d(throwable)
+        }.collect { currencyList ->
+            currencyList.map {
+                // For the free account, API only supports USD exchange rates.
+                if (it.symbol == CURRENCY_ACTIVE) {
+                    MainCurrency(it.symbol, true)
+                } else {
+                    MainCurrency(it.symbol, false)
                 }
+            }.let {
+                _currenciesUiState.value = CurrenciesUiState.Success(it)
             }
+        }
     }
 
-    private fun fetchExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
+    private fun fetchExchangeRates() = viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
         provider.getExchangeRatesRepository.getResultFromRemoteDataSource()
-            .let {
-                getExchangeRates()
-            }
+            .let { getExchangeRates() }
     }
 
     private fun getExchangeRates() = viewModelScope.launch(Dispatchers.IO) {
         _exchangeRatesUiState.value = ExchangeRatesUiState.Loading
-        provider.getExchangeRatesRepository.getResultFromLocalDataSource()
-            .catch { throwable ->
-                _exchangeRatesUiState.value = ExchangeRatesUiState.Failure(throwable.message)
-                Timber.d(throwable)
-            }.collect {
-                _baseExchangeRates = it
-                _exchangeRatesUiState.value = ExchangeRatesUiState.Success(_baseExchangeRates)
-            }
+        provider.getExchangeRatesRepository.getResultFromLocalDataSource().catch { throwable ->
+            _exchangeRatesUiState.value = ExchangeRatesUiState.Failure(throwable.message)
+            Timber.d(throwable)
+        }.collect {
+            _baseExchangeRates = it
+            _exchangeRatesUiState.value = ExchangeRatesUiState.Success(_baseExchangeRates)
+        }
     }
 }
